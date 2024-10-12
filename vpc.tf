@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "gw" {
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.csye6225.id
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.public_cidr_block
     gateway_id = aws_internet_gateway.gw.id
   }
   tags = {
