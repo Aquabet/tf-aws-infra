@@ -1,0 +1,21 @@
+name: Packer Format Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  packer-fmt:
+    name: 'Check Packer Format'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v1
+
+    - name: Run packer fmt
+      run: packer fmt -check .
