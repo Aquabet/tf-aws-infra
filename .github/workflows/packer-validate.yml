@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Packer
-      uses: hashicorp/setup-packer@v1
+      run: sudo apt-get update && sudo apt-get install -y packer
 
     - name: Run packer Validate
       run: packer validate .
