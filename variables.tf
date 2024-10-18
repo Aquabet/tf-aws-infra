@@ -1,6 +1,6 @@
-variable "vpc_cidr" {
+variable "vpc_cidrs" {
   description = "The CIDR block for the VPC"
-  type        = string
+  type        = list(string)
 }
 
 variable "public_subnet_cidrs" {
@@ -20,4 +20,9 @@ variable "aws_profile" {
 variable "public_cidr_block" {
   description = "The CIDR block for the public route"
   type        = string
+}
+
+variable "aws_regions" {
+  description = "The AWS regions to deploy resources"
+  type        = list(string)
 }
