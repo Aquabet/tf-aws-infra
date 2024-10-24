@@ -61,3 +61,9 @@ variable "volume_type" {
   description = "The type of the volume for the EC2 instance"
   type        = string
 }
+
+variable "allow_ports" {
+  description = "The ports to allow"
+  type        = list(number)
+
+}
