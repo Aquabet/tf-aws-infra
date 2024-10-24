@@ -65,5 +65,5 @@ variable "volume_type" {
 variable "allow_ports" {
   description = "The ports to allow"
   type        = list(number)
-  
+
 }
