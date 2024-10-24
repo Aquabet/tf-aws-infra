@@ -26,24 +26,32 @@ resource "aws_security_group" "application_security_group" {
   vpc_id      = aws_vpc.csye6225[count.index].id
 
   ingress {
-    from_port        = 22
-    to_port          = 22
+    from_port        = var.allow_ports[0]
+    to_port          = var.allow_ports[0]
     protocol         = "tcp"
     cidr_blocks      = var.ipv4_cidr_blocks_allow_all
     ipv6_cidr_blocks = var.ipv6_cidr_blocks_allow_all
   }
 
   ingress {
-    from_port        = 80
-    to_port          = 80
+    from_port        = var.allow_ports[1]
+    to_port          = var.allow_ports[1]
     protocol         = "tcp"
     cidr_blocks      = var.ipv4_cidr_blocks_allow_all
     ipv6_cidr_blocks = var.ipv6_cidr_blocks_allow_all
   }
 
   ingress {
-    from_port        = 443
-    to_port          = 443
+    from_port        = var.allow_ports[2]
+    to_port          = var.allow_ports[2]
+    protocol         = "tcp"
+    cidr_blocks      = var.ipv4_cidr_blocks_allow_all
+    ipv6_cidr_blocks = var.ipv6_cidr_blocks_allow_all
+  }
+
+  ingress {
+    from_port        = var.allow_ports[3]
+    to_port          = var.allow_ports[3]
     protocol         = "tcp"
     cidr_blocks      = var.ipv4_cidr_blocks_allow_all
     ipv6_cidr_blocks = var.ipv6_cidr_blocks_allow_all
