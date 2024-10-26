@@ -2,12 +2,26 @@ resource "aws_instance" "webapp_instance" {
   count                       = length(var.aws_regions)
   ami                         = var.ami_id[count.index]
   instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.csye6225_public[0].id
+  subnet_id                   = aws_subnet.csye6225_public[count.index].id
   associate_public_ip_address = true
   key_name                    = var.key_name
   vpc_security_group_ids      = [aws_security_group.application_security_group[count.index].id]
 
   disable_api_termination = false
+
+  user_data = <<-EOF
+#!/bin/bash
+####################################################
+# Configure .env for webapp                       #
+####################################################
+touch /opt/webapp/.env
+echo "DATABASE_URI=mysql+mysqlconnector://${var.db_username}:${var.db_password}@${aws_db_instance.csye6225_rds_instance[count.index].endpoint}/${var.db_name}" > /opt/webapp/.env
+
+sudo chown csye6225:csye6225 /opt/webapp/.env
+sudo chmod 600 /opt/webapp/.env
+sudo systemctl restart webapp.service
+  EOF
+
   root_block_device {
     volume_size           = var.root_volume_size
     volume_type           = var.volume_type
