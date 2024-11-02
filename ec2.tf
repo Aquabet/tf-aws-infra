@@ -6,8 +6,8 @@ resource "aws_instance" "webapp_instance" {
   associate_public_ip_address = true
   key_name                    = var.key_name
   vpc_security_group_ids      = [aws_security_group.application_security_group[count.index].id]
-
-  disable_api_termination = false
+  iam_instance_profile        = aws_iam_instance_profile.cloudwatch_s3_instance_profile.name
+  disable_api_termination     = false
 
   user_data = <<-EOF
 #!/bin/bash
@@ -15,7 +15,12 @@ resource "aws_instance" "webapp_instance" {
 # Configure .env for webapp                       #
 ####################################################
 touch /opt/webapp/.env
-echo "DATABASE_URI=mysql+mysqlconnector://${var.db_username}:${var.db_password}@${aws_db_instance.csye6225_rds_instance[count.index].endpoint}/${var.db_name}" > /opt/webapp/.env
+echo "DATABASE_URI=mysql+mysqlconnector://${var.db_username}:${var.db_password}@${aws_db_instance.csye6225_rds_instance[count.index].endpoint}/${var.db_name}
+S3_BUCKET_NAME=${aws_s3_bucket.webapp_bucket.bucket}
+S3_ENDPOINT_URL=https://s3.${var.aws_regions[count.index]}.amazonaws.com
+AWS_REGION=${var.aws_regions[count.index]}
+SENDGRID_API_KEY=var.sendgrid_api_key
+" > /opt/webapp/.env
 
 sudo chown csye6225:csye6225 /opt/webapp/.env
 sudo chmod 600 /opt/webapp/.env

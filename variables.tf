@@ -98,3 +98,43 @@ variable "db_instance_class" {
   description = "The instance class for the RDS instance"
   type        = string
 }
+
+variable "domain_name" {
+  description = "The root domain name for the project (e.g., example.com)"
+  type        = string
+}
+
+variable "dev_zone_id" {
+  description = "The Route 53 zone ID for the dev environment"
+  type        = string
+}
+
+variable "demo_zone_id" {
+  description = "The Route 53 zone ID for the demo environment"
+  type        = string
+}
+
+variable "ttl" {
+  description = "The time to live for the Route 53 record"
+  type        = number
+}
+
+variable "encryption_algorithm" {
+  description = "The encryption algorithm for the S3 bucket"
+  type        = string
+}
+
+variable "record_type" {
+  description = "The record type for the Route 53 record"
+  type        = string
+}
+
+variable "root_account_id" {
+  description = "The root account ID for the AWS account"
+  type        = string
+}
+
+variable "sendgrid_api_key" {
+  description = "The SendGrid API key for the email service"
+  type        = string
+}

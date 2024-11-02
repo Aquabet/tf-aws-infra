@@ -26,7 +26,6 @@ output "webapp_instance_id" {
   description = "ID of the WebApp instance"
   value       = aws_instance.webapp_instance[*].id
 }
-# outputs.tf
 output "db_instance_endpoint" {
   description = "The RDS instance endpoint"
   value       = aws_db_instance.csye6225_rds_instance[*].endpoint
