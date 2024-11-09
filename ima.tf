@@ -1,11 +1,13 @@
-resource "aws_iam_role" "cloudwatch_s3_role" {
-  name = "cloudwatch_s3_agent_role"
+resource "aws_iam_role" "WebappRole" {
+  name = "WebappRole"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Principal" : { "Service" : "ec2.amazonaws.com" },
+        "Principal" : {
+          "Service" : "ec2.amazonaws.com"
+        },
         "Action" : "sts:AssumeRole"
       }
     ]
@@ -33,11 +35,6 @@ resource "aws_iam_policy" "cloudwatch_policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attach" {
-  role       = aws_iam_role.cloudwatch_s3_role.name
-  policy_arn = aws_iam_policy.cloudwatch_policy.arn
-}
-
 resource "aws_iam_policy" "s3_access_policy" {
   name        = "s3_access_policy"
   description = "Allows EC2 instance to access S3 bucket for web application"
@@ -61,12 +58,16 @@ resource "aws_iam_policy" "s3_access_policy" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attach" {
+  role       = aws_iam_role.WebappRole.name
+  policy_arn = aws_iam_policy.cloudwatch_policy.arn
+}
 resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
-  role       = aws_iam_role.cloudwatch_s3_role.name
+  role       = aws_iam_role.WebappRole.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
 }
 
-resource "aws_iam_instance_profile" "cloudwatch_s3_instance_profile" {
-  name = "cloudwatch_s3_instance_profile"
-  role = aws_iam_role.cloudwatch_s3_role.name
+resource "aws_iam_instance_profile" "webapp_ec2_instance_profile" {
+  name = "WebAppEC2InstanceProfile"
+  role = aws_iam_role.WebappRole.name
 }

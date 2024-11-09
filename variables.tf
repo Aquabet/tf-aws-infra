@@ -39,7 +39,7 @@ variable "aws_regions" {
 
 variable "ami_id" {
   description = "The AMI ID for the EC2 instance"
-  type        = list(string)
+  type        = string
 }
 
 variable "instance_type" {
@@ -137,4 +137,94 @@ variable "root_account_id" {
 variable "sendgrid_api_key" {
   description = "The SendGrid API key for the email service"
   type        = string
+}
+
+variable "cooldown_time" {
+  description = "The cooldown time for the autoscaling group"
+  type        = number
+}
+
+variable "asg_min_size" {
+  description = "The minimum size for the autoscaling group"
+  type        = number
+}
+
+variable "asg_max_size" {
+  description = "The maximum size for the autoscaling group"
+  type        = number
+}
+
+variable "asg_desired_capacity" {
+  description = "The desired capacity for the autoscaling group"
+  type        = number
+}
+
+variable "scaling_adjustment_scale_up" {
+  description = "The scaling adjustment for the autoscaling policy"
+  type        = number
+}
+
+variable "scaling_adjustment_scale_down" {
+  description = "The scaling adjustment for the autoscaling policy"
+  type        = number
+}
+
+variable "cloudwatch_alarm_period" {
+  description = "The period for the CloudWatch alarm"
+  type        = number
+}
+
+variable "evaluation_periods" {
+  description = "The evaluation periods for the CloudWatch alarm"
+  type        = number
+}
+
+variable "scale_up_threshold" {
+  description = "The threshold for the scale up alarm"
+  type        = number
+}
+
+variable "scale_down_threshold" {
+  description = "The threshold for the scale down alarm"
+  type        = number
+}
+
+variable "health_check_path" {
+  description = "The path for the health check"
+  type        = string
+}
+
+variable "health_check_interval" {
+  description = "The interval for the health check"
+  type        = number
+}
+
+variable "health_check_timeout" {
+  description = "The timeout for the health check"
+  type        = number
+}
+
+variable "health_check_healthy_threshold" {
+  description = "The healthy threshold for the health check"
+  type        = number
+}
+
+variable "health_check_unhealthy_threshold" {
+  description = "The unhealthy threshold for the health check"
+  type        = number
+}
+
+variable "health_check_matcher" {
+  description = "The matcher for the health check"
+  type        = string
+}
+
+variable "webapp_port" {
+  description = "The port for the web application"
+  type        = number
+}
+
+variable "wlb_port" {
+  description = "The port for the web load balancer"
+  type        = number
 }
