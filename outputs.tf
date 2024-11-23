@@ -27,7 +27,22 @@ output "az" {
 #   value       = aws_instance.webapp_instance[*].id
 # }
 
+output "launch_template_id" {
+  description = "The ID of the launch template"
+  value       = aws_launch_template.csye6225_asg[*].id
+}
+
 output "db_instance_endpoint" {
   description = "The RDS instance endpoint"
   value       = aws_db_instance.csye6225_rds_instance[*].endpoint
+}
+
+output "sns_topic_arn" {
+  description = "The ARN of the SNS topic"
+  value       = aws_sns_topic.csye6225_signup_topic.arn
+}
+
+output "lambda_arn" {
+  description = "The ARN of the Lambda function"
+  value       = aws_lambda_function.lambda_function.arn
 }

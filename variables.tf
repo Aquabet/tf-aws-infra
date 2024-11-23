@@ -228,3 +228,8 @@ variable "wlb_port" {
   description = "The port for the web load balancer"
   type        = number
 }
+
+variable "lambda_runtime" {
+  description = "The runtime for the Lambda function"
+  type        = string
+}

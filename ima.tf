@@ -14,6 +14,22 @@ resource "aws_iam_role" "WebappRole" {
   })
 }
 
+resource "aws_iam_role" "LambdaRole" {
+  name = "LambdaRole"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_policy" "cloudwatch_policy" {
   name        = "cloudwatch_policy"
   description = "Allows CloudWatch Agent to log and send metrics"
@@ -58,6 +74,43 @@ resource "aws_iam_policy" "s3_access_policy" {
   })
 }
 
+resource "aws_iam_policy" "lambda_execution_policy" {
+  name = "lambda_execution_policy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+        ],
+        "Resource" : "arn:aws:logs:*:*:*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : "sns:Publish",
+        "Resource" : aws_sns_topic.csye6225_signup_topic.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "sns_publish_policy" {
+  name = "sns_publish_policy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sns:Publish",
+        "Resource" : aws_sns_topic.csye6225_signup_topic.arn
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attach" {
   role       = aws_iam_role.WebappRole.name
   policy_arn = aws_iam_policy.cloudwatch_policy.arn
@@ -65,6 +118,16 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attach" {
 resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
   role       = aws_iam_role.WebappRole.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "sns_publish_policy_policy_attach" {
+  role       = aws_iam_role.WebappRole.name
+  policy_arn = aws_iam_policy.sns_publish_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
+  role       = aws_iam_role.LambdaRole.name
+  policy_arn = aws_iam_policy.lambda_execution_policy.arn
 }
 
 resource "aws_iam_instance_profile" "webapp_ec2_instance_profile" {
