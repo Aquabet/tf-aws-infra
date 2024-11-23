@@ -39,10 +39,10 @@ output "db_instance_endpoint" {
 
 output "sns_topic_arn" {
   description = "The ARN of the SNS topic"
-  value = aws_sns_topic.csye6225_signup_topic.arn
+  value       = aws_sns_topic.csye6225_signup_topic.arn
 }
 
 output "lambda_arn" {
   description = "The ARN of the Lambda function"
-  value = aws_lambda_function.lambda_function.arn
+  value       = aws_lambda_function.lambda_function.arn
 }
