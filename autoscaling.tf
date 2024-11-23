@@ -21,6 +21,8 @@ S3_BUCKET_NAME=${aws_s3_bucket.webapp_bucket.bucket}
 S3_ENDPOINT_URL=https://s3.${var.aws_regions[0]}.amazonaws.com
 AWS_REGION=${var.aws_regions[0]}
 SENDGRID_API_KEY=${var.sendgrid_api_key}
+BASE_URL=http://${var.aws_profile}.${var.domain_name}
+SNS_TOPIC_ARN=${aws_sns_topic.csye6225_signup_topic.arn}
 " > /opt/webapp/.env
 
 sudo chown csye6225:csye6225 /opt/webapp/.env
