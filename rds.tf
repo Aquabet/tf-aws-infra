@@ -13,8 +13,8 @@ resource "aws_db_instance" "csye6225_rds_instance" {
   engine                 = var.db_engine
   instance_class         = var.db_instance_class
   allocated_storage      = 20
-  username               = var.db_username
-  password               = var.db_password
+  username               = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string).username
+  password               = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string).password
   port                   = var.db_port
   db_subnet_group_name   = aws_db_subnet_group.csye6225_subnet_group.name
   vpc_security_group_ids = [aws_security_group.database.id]
@@ -22,6 +22,8 @@ resource "aws_db_instance" "csye6225_rds_instance" {
   multi_az               = false
   db_name                = var.db_name
   parameter_group_name   = aws_db_parameter_group.csye6225_rds_parameter_group.name
+  storage_encrypted      = true
+  kms_key_id             = aws_kms_key.rds_key.arn
   skip_final_snapshot    = true
 
   tags = {

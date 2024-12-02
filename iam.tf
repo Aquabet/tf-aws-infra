@@ -110,6 +110,42 @@ resource "aws_iam_policy" "sns_publish_policy" {
     ]
   })
 }
+resource "aws_iam_policy" "kms_access_policy" {
+  name = "kms_access_policy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey",
+          "kms:CreateGrant",
+        ],
+        "Resource" : "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "secrets_manager_policy" {
+  name = "secrets_manager_policy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:GetSecretValue",
+        ],
+        "Resource" : "arn:aws:secretsmanager:*:*:secret:*"
+      }
+    ]
+  })
+}
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attach" {
   role       = aws_iam_role.WebappRole.name
@@ -125,9 +161,29 @@ resource "aws_iam_role_policy_attachment" "sns_publish_policy_policy_attach" {
   policy_arn = aws_iam_policy.sns_publish_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "kms_policy_attach" {
+  role       = aws_iam_role.WebappRole.name
+  policy_arn = aws_iam_policy.kms_access_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "secrets_manager_policy_attach" {
+  role       = aws_iam_role.WebappRole.name
+  policy_arn = aws_iam_policy.secrets_manager_policy.arn
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   role       = aws_iam_role.LambdaRole.name
   policy_arn = aws_iam_policy.lambda_execution_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_kms_policy_attach" {
+  role       = aws_iam_role.LambdaRole.name
+  policy_arn = aws_iam_policy.kms_access_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_secrets_manager_policy_attach" {
+  role       = aws_iam_role.LambdaRole.name
+  policy_arn = aws_iam_policy.secrets_manager_policy.arn
 }
 
 resource "aws_iam_instance_profile" "webapp_ec2_instance_profile" {

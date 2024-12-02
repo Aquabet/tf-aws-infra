@@ -5,12 +5,16 @@ resource "aws_lambda_function" "lambda_function" {
   role          = aws_iam_role.LambdaRole.arn
 
   filename = "./lambda.zip"
+  layers = [
+    "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension:12"
+  ]
 
   environment {
     variables = {
-      SENDGRID_API_KEY = var.sendgrid_api_key,
-      DOMAIN           = var.domain_name,
-      AWS_PROFILE      = var.aws_profile
+      DOMAIN                                 = var.domain_name,
+      SECRET_NAME                            = aws_secretsmanager_secret.email_service.name
+      AWS_PROFILE_NAME                       = var.aws_profile
+      PARAMETERS_SECRETS_EXTENSION_HTTP_PORT = 2773
     }
   }
 }

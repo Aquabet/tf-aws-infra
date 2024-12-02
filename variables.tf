@@ -233,3 +233,8 @@ variable "lambda_runtime" {
   description = "The runtime for the Lambda function"
   type        = string
 }
+
+variable "acm_certificate_arn" {
+  description = "The ARN for the ACM certificate"
+  type        = string
+}

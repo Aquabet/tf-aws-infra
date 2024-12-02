@@ -39,7 +39,9 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 resource "aws_lb_listener" "webapp_listener" {
   load_balancer_arn = aws_lb.webapp_alb.arn
   port              = var.wlb_port
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.acm_certificate_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.webapp_target_group.arn

@@ -61,15 +61,6 @@ resource "aws_security_group" "load_balancer" {
   vpc_id      = aws_vpc.csye6225.id
 
   ingress {
-    description      = "Allow HTTP traffic"
-    from_port        = var.allow_ports[1]
-    to_port          = var.allow_ports[1]
-    protocol         = "tcp"
-    cidr_blocks      = var.ipv4_cidr_blocks_allow_all
-    ipv6_cidr_blocks = var.ipv6_cidr_blocks_allow_all
-  }
-
-  ingress {
     description      = "Allow HTTPS traffic"
     from_port        = var.allow_ports[2]
     to_port          = var.allow_ports[2]
