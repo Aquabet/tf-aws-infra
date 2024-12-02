@@ -10,18 +10,30 @@ resource "aws_launch_template" "csye6225_asg" {
     associate_public_ip_address = true
     security_groups             = [aws_security_group.webapp.id]
   }
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+    ebs {
+      volume_size           = var.root_volume_size
+      volume_type           = var.volume_type
+      delete_on_termination = true
+      encrypted             = true
+      kms_key_id            = aws_kms_key.ec2_key.arn
+    }
+  }
   user_data = base64encode(<<-EOF
 #!/bin/bash
 ####################################################
-# Configure .env for webapp                       #
+# Configure .env for webapp                        #
 ####################################################
 touch /opt/webapp/.env
-echo "DATABASE_URI=mysql+mysqlconnector://${var.db_username}:${var.db_password}@${aws_db_instance.csye6225_rds_instance.endpoint}/${var.db_name}
+echo "RDS_ENDPOINT=${aws_db_instance.csye6225_rds_instance.endpoint}
+DB_NAME=${var.db_name}
+DB_SECRETS_NAME=${aws_secretsmanager_secret.db_password_secret.name}
 S3_BUCKET_NAME=${aws_s3_bucket.webapp_bucket.bucket}
 S3_ENDPOINT_URL=https://s3.${var.aws_regions[0]}.amazonaws.com
 AWS_REGION=${var.aws_regions[0]}
-SENDGRID_API_KEY=${var.sendgrid_api_key}
-BASE_URL=http://${var.aws_profile}.${var.domain_name}
+BASE_URL=https://${var.aws_profile}.${var.domain_name}
 SNS_TOPIC_ARN=${aws_sns_topic.csye6225_signup_topic.arn}
 " > /opt/webapp/.env
 

@@ -46,3 +46,8 @@ output "lambda_arn" {
   description = "The ARN of the Lambda function"
   value       = aws_lambda_function.lambda_function.arn
 }
+
+output "ec2_key_arn" {
+  description = "The ARN of the EC2 KMS key"
+  value       = aws_kms_key.ec2_key.arn
+}
