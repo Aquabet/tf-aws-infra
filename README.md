@@ -2,6 +2,12 @@
 
 This repository contains the Terraform configuration files for setting up AWS infrastructure, including VPC, subnets, internet gateway, route tables, RDS, security groups, auto-scaling, load balancer, AWS Lambda, SNS, KMS keys, and more. The infrastructure is designed to be scalable, secure, and highly available.
 
+## CSYE-6225
+
+- [Web Application](https://github.com/Aquabet/webapp)
+- [Terraform-Infra](https://github.com/Aquabet/tf-aws-infra)
+- [Serverless Lambda](https://github.com/Aquabet/serverless)
+
 ## Prerequisites
 
 - aws >=5.70.0, <6.0.0
